@@ -523,9 +523,12 @@ libkdump_read_once(int tsx) {
           return i;
         }
       }
+    }
+    if (config.massage_kernel) {
+      config.massage_kernel(config.massage_data);
+    } else {
       sched_yield();
     }
-    sched_yield();
   }
   return 0;
 }

@@ -45,6 +45,8 @@ typedef struct {
   libkdump_load_t load_type; /**< Function the load threads should execute */
   int retries; /**< Number of Meltdown retries for an address */
   size_t physical_offset; /**< Address of the physical direct map */
+  void (*massage_kernel)(void *data); /**< Callback before every measurement */
+  void *massage_data; /**< Data for callback */
 } libkdump_config_t;
 
 extern libkdump_config_t libkdump_auto_config;
